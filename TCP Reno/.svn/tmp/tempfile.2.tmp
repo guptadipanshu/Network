@@ -1,0 +1,312 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <errno.h>
+#include <pthread.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netdb.h>
+#include <arpa/inet.h>
+#include <sys/wait.h>
+#include <signal.h>
+#include <sys/stat.h>
+#include <string.h>
+#include <time.h>
+#include <stdlib.h>
+#include <sys/time.h>
+#include <math.h>
+struct addrinfo hints,*result,*ressave;
+struct sockaddr *sa;
+socklen_t sa_len;
+//pthread_mutex_t file_mutex;
+char* filename;
+FILE *fp;
+int increase_size=50;
+
+unsigned long long int send_Protocol(unsigned long long int packet_size,int *sock_fd,unsigned long long int offset,unsigned long long int seq,unsigned long long int window_id)
+{	
+	char * mssg;
+	char *buf;
+	char seq_no[500];//will need to change this value
+	char mssg_offset[500];//will need to change this value
+	char pack_size[500];
+	char win_id[500];
+	buf=malloc(sizeof(char)*packet_size+1);
+	mssg=malloc(sizeof(char)*packet_size+offset+4+packet_size+window_id);//final mssg to be send
+	memset(pack_size,'\0',(sizeof(pack_size)));
+	memset(win_id,'\0',(sizeof(win_id)));
+	memset(seq_no,'\0',(sizeof(seq_no)));
+	memset(mssg_offset,'\0',(sizeof(mssg_offset)));
+	memset(buf,'\0',(sizeof(char)*packet_size)+1);// this may slow up but is a must else we may read junk
+	memset(mssg,'\0',(sizeof(char)*packet_size+offset+4+packet_size+window_id));//this may slow up
+	sprintf(seq_no,"%lld",seq);
+	sprintf(win_id,"%lld",window_id);
+	sprintf(pack_size,"%lld",packet_size);
+	sprintf(mssg_offset,"%lld",offset);
+	strcpy(mssg,seq_no);
+	strcat(mssg,".");
+	strcat(mssg,mssg_offset);
+	strcat(mssg,".");
+	strcat(mssg,pack_size);
+	strcat(mssg,".");
+	strcat(mssg,win_id);
+	strcat(mssg," ");
+	fflush(stderr);
+	int len=strlen(mssg);
+	//fprintf(stderr,"message =%s\n",mssg);
+	/**************Use Mutex to read data else may end up with multiple fp accesing the file*********************/
+	//pthread_mutex_lock(&file_mutex);
+	
+	fseek(fp,offset,SEEK_SET);
+	unsigned long long int result_length;
+	result_length=fread(buf,packet_size,1,fp);
+	if(result_length>0)
+	{	
+		
+		int i,j=len;
+		for(i = 0;i < packet_size;++i)
+     		{
+     			mssg[j++]=((char *)buf)[i];
+     			//fprintf(stderr,"%c", ((char *)buf)[i]);
+     		}
+     		//fprintf(stderr,"\n--\n");
+		//fprintf(stderr,"buffer =%s\n",buf);
+		//strcat(mssg,buf);
+		//for(i = 0;i < packet_size+len;++i)
+		//	fprintf(stderr,"%c", ((char *)mssg)[i]);
+		//fprintf(stderr,"message =%s\n",mssg);
+		//fprintf(stderr,"\n");	
+		if(sendto(*sock_fd,mssg,packet_size+len+1,0 ,sa,sa_len)<=0)	
+		{
+			//fprintf(stderr,"Unable to connect maybe Host not found or wrong port\n");
+			fclose(fp);
+			pthread_mutex_unlock(&file_mutex);
+			while(sendto(*sock_fd,mssg,packet_size+len+1,0 ,sa,sa_len)<=0);
+			
+			return 0;//timeout that means we had a Nack retransmit
+		}
+		else
+		{
+		/****************start timeout****LOOK FOR ACKS********************************/
+			//fprintf(stderr,"Successfully send waiting ACK\n");
+			
+			//pthread_mutex_unlock(&file_mutex);
+			return 1;
+		}		
+	}
+	else
+	{
+		fprintf(stderr,"unable to read should not happen or The file should already be transferred if this happened\n");	
+		
+		//pthread_mutex_unlock(&file_mutex);
+		exit(0);
+		return 2;	
+	}
+}
+unsigned long long int  receive_protocol(int * sock_fd)
+{
+	char return_buf[6000];
+	return_buf[0]='\0';
+	int i;
+	unsigned long long int returned_ack;
+	//fprintf(stderr,"waitng for rec\n");
+	memset(return_buf,'\0',(sizeof(return_buf)));
+	if ((recvfrom(*sock_fd, &return_buf, 6000, 0 , NULL, NULL) <= 0 ))
+	{
+		fprintf(stderr,"Unable to READ ACK\n");	
+		return 0;
+		
+	}
+	else
+	{
+		//for(i = 0;i < strlen(return_buf);++i)
+		//	fprintf(stderr,"%c ", ((char *)return_buf)[i]);
+		//transferred+=packet_size;
+		returned_ack= atoll(return_buf);
+		if(returned_ack==0)//all packets delivered
+		{
+			fprintf(stderr,"Receivecd Ack . Last packet succesfully delivered\n");
+			fclose(fp);	
+			exit(0);
+		}
+	}
+	//fprintf(stderr,"  received ack %lld \n",returned_ack);
+	return returned_ack;
+}
+
+void start_Protocol(int *sock_fd,char* filename, unsigned long long int bytesToTransfer)
+{
+	unsigned long long int transferred=0;
+	unsigned long long int window_size=4;
+	unsigned long long int packet_size=50;
+	unsigned long long int current_seq=1;
+	unsigned long long int last_ack;
+	unsigned long long int last_packet_size;
+	unsigned long long int total_ack;
+	unsigned long long int count_receive=0;
+	unsigned long long int window_id=1;
+	unsigned long long int start_seq=0;
+	unsigned long long int end_seq=0;
+	int all_delivered=0;
+	while(transferred<bytesToTransfer)
+	{
+		if(packet_size>(bytesToTransfer-transferred))// only one packet needs to be send
+		{
+			window_size=1;
+			packet_size=bytesToTransfer-transferred;
+			//fprintf(stderr,"Last packet \n");
+		}
+		int i;
+		unsigned long long int start[window_size],end[window_size];
+		unsigned long long int offset[window_size];
+		unsigned long long int current_packet_size[window_size];
+		start[0]=transferred;
+        	end[0]=transferred+packet_size;
+		for(i=1;i<window_size;i++)
+        	{
+        		start[i]=end[i-1];
+        		if(start[i]+packet_size>=bytesToTransfer)
+     			{	
+				packet_size=bytesToTransfer-start[i]; //this is the last packet
+				last_packet_size=packet_size;				
+				window_size=i+1;
+				end[i]=start[i]+packet_size;
+				//fprintf(stderr,"Last packet \n");
+				break;			
+			}	        		
+			end[i]=start[i]+packet_size;
+        		//fprintf(stderr,"transferred =%d start %d end %d\n",transferred,start[i],end[i]);
+        	}
+        	start_seq=current_seq;
+		for(i=0;i<window_size;i++)
+        	{
+			offset[i]=start[i];
+        		current_packet_size[i]=end[i]-start[i];
+        		if(offset[i]+current_packet_size[i]==bytesToTransfer)
+        		{
+				total_ack=current_seq-1;        			
+				//fprintf(stderr,"Last packet \n");
+        		 	current_seq=0;
+				window_size=0;
+				all_delivered=1;
+        		}
+        		//if(current_seq!=500 || current_seq!=1217 || current_seq!=2100)
+        		///{
+				if(send_Protocol(current_packet_size[i],sock_fd,offset[i],current_seq,window_size)==1)
+        			{	
+        				if(current_seq!=0)
+        					current_seq++;
+        		 		transferred+=current_packet_size[i];
+        			}
+        			else// something bad happened , go for retransmission
+        			{
+        				fprintf(stderr,"Window retransmit unexpected behavior \n");
+        		 		transferred-=current_packet_size[i];
+        		 		i--;
+        			}
+        		//}else 
+        		///	current_seq++;	
+        	
+		}
+		end_seq=current_seq-1;
+		//fprintf(stderr,"round over \n");
+		/******************************Window has been sent look for ACK******************************************/
+		last_ack=receive_protocol(sock_fd);
+		//fprintf(stderr,"last ack %lld  wanted %lld \n", last_ack,current_seq);
+		if(last_ack!=current_seq)//all packets did not got delivered
+		{
+			fprintf(stderr,"duplicate last ack %lld  wanted %lld \n", last_ack,current_seq);
+			while(last_ack!=current_seq)
+			{
+				for(i=0;i<window_size;i++)
+        			{
+        				fprintf(stderr,"seq %d\n",start_seq);
+        				send_Protocol(current_packet_size[i],sock_fd,offset[i],start_seq++,window_size);
+        				last_ack=receive_protocol(sock_fd);
+        				if(last_ack==current_seq)
+        					break;
+        			}
+        			start_seq=end_seq;
+        			
+			}
+			if(window_size!=1)
+				window_size=window_size/2;
+			
+		}
+		else
+			window_size+=2;
+		//fprintf(stderr,"round over window_size %lld  %lld\n",window_size,window_id+1);	
+		window_id++;	
+	}
+}	
+
+
+void reliablyTransfer(char* hostname, char* hostUDPport, char* filename, unsigned long long int bytesToTransfer)
+{
+	/***************SETUP UDP PROTOCOL*****************/
+	//pthread_mutex_init(&file_mutex,NULL);
+	int * sock_fd=malloc(sizeof(int));
+	memset(&hints,0x00,sizeof(struct addrinfo));
+	hints.ai_family= AF_INET;
+	//hints.ai_flags=AI_PASSIVE;
+	hints.ai_socktype=SOCK_DGRAM;
+	hints.ai_protocol=IPPROTO_UDP;
+	getaddrinfo(hostname,hostUDPport,&hints,&result);
+	do
+    	{	/* each of the returned IP address is tried*/
+    		*sock_fd=socket(result->ai_family, result->ai_socktype, result->ai_protocol);
+    		if(*sock_fd>= 0)
+    			break; /*success*/
+    		else
+    			{}	
+	}while ((result=result->ai_next) != NULL);
+	sa=malloc(result->ai_addrlen);
+  	memcpy(sa, result->ai_addr, result->ai_addrlen);
+  	sa_len=result->ai_addrlen;
+	freeaddrinfo(ressave);
+	
+	struct timeval timeout;      
+	timeout.tv_sec = 3;
+	timeout.tv_usec = 0;
+	int return_value=setsockopt (*sock_fd, SOL_SOCKET,SO_SNDTIMEO, &timeout,sizeof(timeout));
+	if(return_value<0)
+        	fprintf(stderr,"setsockopt failed \n");  
+	else
+		fprintf(stderr,"setsockopt enabled \n"); 
+	
+	      
+	timeout.tv_sec = 1;
+	timeout.tv_usec = 0000;//3 millisec timeouts
+	return_value=setsockopt (*sock_fd, SOL_SOCKET, SO_RCVTIMEO, &timeout,sizeof(timeout));
+	if(return_value<0)
+        	fprintf(stderr,"setsockopt failed \n");  
+	else
+		fprintf(stderr,"setsockopt receiver end enabled \n"); 
+	
+	
+	fp = fopen(filename,"rb");
+    	start_Protocol(sock_fd,filename,bytesToTransfer);  
+    
+	
+}
+
+
+
+
+int main(int argc, char** argv)
+{
+	char* udpPort;
+	unsigned long long int numBytes;
+	
+	if(argc != 5)
+	{
+		fprintf(stderr, "usage: %s receiver_hostname receiver_port filename_to_xfer bytes_to_xfer\n\n", argv[0]);
+		exit(1);
+	}
+	udpPort =argv[2];
+	filename=argv[3];
+	numBytes = atoll(argv[4]);
+	reliablyTransfer(argv[1], udpPort, argv[3], numBytes);
+} 

@@ -1,0 +1,323 @@
+compilation of version 154 failed with:
+gcc -o reliable_receiver receiver_main.c
+gcc -o reliable_sender sender_main.c -lpthread -lm
+sender_main.c: In function ‘start_Protocol’:
+sender_main.c:264:30: error: expected ‘;’ before ‘)’ token
+     window_size = window_size)/2;
+                              ^
+sender_main.c:264:30: error: expected statement before ‘)’ token
+sender_main.c:264:31: error: expected expression before ‘/’ token
+     window_size = window_size)/2;
+                               ^
+make: *** [reliable_sender] Error 1
+ 
+drs g
+ rthr fjr 
+ tfjyh
+ erth 
+ ter h
+ reth 
+ rtjuti
+ =====================================
+ compilation of version 154 failed with:
+gcc -o reliable_receiver receiver_main.c
+gcc -o reliable_sender sender_main.c -lpthread -lm
+sender_main.c: In function ‘start_Protocol’:
+sender_main.c:264:30: error: expected ‘;’ before ‘)’ token
+     window_size = window_size)/2;
+                              ^
+sender_main.c:264:30: error: expected statement before ‘)’ token
+sender_main.c:264:31: error: expected expression before ‘/’ token
+     window_size = window_size)/2;
+                               ^
+make: *** [reliable_sender] Error 1
+ 
+drs g
+ rthr fjr 
+ tfjyh
+ erth 
+ ter h
+ reth 
+ rtjuti
+ =====================================compilation of version 154 failed with:
+gcc -o reliable_receiver receiver_main.c
+gcc -o reliable_sender sender_main.c -lpthread -lm
+sender_main.c: In function ‘start_Protocol’:
+sender_main.c:264:30: error: expected ‘;’ before ‘)’ token
+     window_size = window_size)/2;
+                              ^
+sender_main.c:264:30: error: expected statement before ‘)’ token
+sender_main.c:264:31: error: expected expression before ‘/’ token
+     window_size = window_size)/2;
+                               ^
+make: *** [reliable_sender] Error 1
+ 
+drs g
+ rthr fjr 
+ tfjyh
+ erth 
+ ter h
+ reth 
+ rtjuti
+ =====================================compilation of version 154 failed with:
+gcc -o reliable_receiver receiver_main.c
+gcc -o reliable_sender sender_main.c -lpthread -lm
+sender_main.c: In function ‘start_Protocol’:
+sender_main.c:264:30: error: expected ‘;’ before ‘)’ token
+     window_size = window_size)/2;
+                              ^
+sender_main.c:264:30: error: expected statement before ‘)’ token
+sender_main.c:264:31: error: expected expression before ‘/’ token
+     window_size = window_size)/2;
+                               ^
+make: *** [reliable_sender] Error 1
+ 
+drs g
+ rthr fjr 
+ tfjyh
+ erth 
+ ter h
+ reth 
+ rtjuti
+ =====================================compilation of version 154 failed with:
+gcc -o reliable_receiver receiver_main.c
+gcc -o reliable_sender sender_main.c -lpthread -lm
+sender_main.c: In function ‘start_Protocol’:
+sender_main.c:264:30: error: expected ‘;’ before ‘)’ token
+     window_size = window_size)/2;
+                              ^
+sender_main.c:264:30: error: expected statement before ‘)’ token
+sender_main.c:264:31: error: expected expression before ‘/’ token
+     window_size = window_size)/2;
+                               ^
+make: *** [reliable_sender] Error 1
+ 
+drs g
+ rthr fjr 
+ tfjyh
+ erth 
+ ter h
+ reth 
+ rtjuti
+ =====================================compilation of version 154 failed with:
+gcc -o reliable_receiver receiver_main.c
+gcc -o reliable_sender sender_main.c -lpthread -lm
+sender_main.c: In function ‘start_Protocol’:
+sender_main.c:264:30: error: expected ‘;’ before ‘)’ token
+     window_size = window_size)/2;
+                              ^
+sender_main.c:264:30: error: expected statement before ‘)’ token
+sender_main.c:264:31: error: expected expression before ‘/’ token
+     window_size = window_size)/2;
+                               ^
+make: *** [reliable_sender] Error 1
+ 
+drs g
+ rthr fjr 
+ tfjyh
+ erth 
+ ter h
+ reth 
+ rtjuti
+ =====================================compilation of version 154 failed with:
+gcc -o reliable_receiver receiver_main.c
+gcc -o reliable_sender sender_main.c -lpthread -lm
+sender_main.c: In function ‘start_Protocol’:
+sender_main.c:264:30: error: expected ‘;’ before ‘)’ token
+     window_size = window_size)/2;
+                              ^
+sender_main.c:264:30: error: expected statement before ‘)’ token
+sender_main.c:264:31: error: expected expression before ‘/’ token
+     window_size = window_size)/2;
+                               ^
+make: *** [reliable_sender] Error 1
+ 
+drs g
+ rthr fjr 
+ tfjyh
+ erth 
+ ter h
+ reth 
+ rtjuti
+ =====================================compilation of version 154 failed with:
+gcc -o reliable_receiver receiver_main.c
+gcc -o reliable_sender sender_main.c -lpthread -lm
+sender_main.c: In function ‘start_Protocol’:
+sender_main.c:264:30: error: expected ‘;’ before ‘)’ token
+     window_size = window_size)/2;
+                              ^
+sender_main.c:264:30: error: expected statement before ‘)’ token
+sender_main.c:264:31: error: expected expression before ‘/’ token
+     window_size = window_size)/2;
+                               ^
+make: *** [reliable_sender] Error 1
+ 
+drs g
+ rthr fjr 
+ tfjyh
+ erth 
+ ter h
+ reth 
+ rtjuti
+ =====================================compilation of version 154 failed with:
+gcc -o reliable_receiver receiver_main.c
+gcc -o reliable_sender sender_main.c -lpthread -lm
+sender_main.c: In function ‘start_Protocol’:
+sender_main.c:264:30: error: expected ‘;’ before ‘)’ token
+     window_size = window_size)/2;
+                              ^
+sender_main.c:264:30: error: expected statement before ‘)’ token
+sender_main.c:264:31: error: expected expression before ‘/’ token
+     window_size = window_size)/2;
+                               ^
+make: *** [reliable_sender] Error 1
+ 
+drs g
+ rthr fjr 
+ tfjyh
+ erth 
+ ter h
+ reth 
+ rtjuti
+ =====================================compilation of version 154 failed with:
+gcc -o reliable_receiver receiver_main.c
+gcc -o reliable_sender sender_main.c -lpthread -lm
+sender_main.c: In function ‘start_Protocol’:
+sender_main.c:264:30: error: expected ‘;’ before ‘)’ token
+     window_size = window_size)/2;
+                              ^
+sender_main.c:264:30: error: expected statement before ‘)’ token
+sender_main.c:264:31: error: expected expression before ‘/’ token
+     window_size = window_size)/2;
+                               ^
+make: *** [reliable_sender] Error 1
+ 
+drs g
+ rthr fjr 
+ tfjyh
+ erth 
+ ter h
+ reth 
+ rtjuti
+ =====================================compilation of version 154 failed with:
+gcc -o reliable_receiver receiver_main.c
+gcc -o reliable_sender sender_main.c -lpthread -lm
+sender_main.c: In function ‘start_Protocol’:
+sender_main.c:264:30: error: expected ‘;’ before ‘)’ token
+     window_size = window_size)/2;
+                              ^
+sender_main.c:264:30: error: expected statement before ‘)’ token
+sender_main.c:264:31: error: expected expression before ‘/’ token
+     window_size = window_size)/2;
+                               ^
+make: *** [reliable_sender] Error 1
+ 
+drs g
+ rthr fjr 
+ tfjyh
+ erth 
+ ter h
+ reth 
+ rtjuti
+ =====================================compilation of version 154 failed with:
+gcc -o reliable_receiver receiver_main.c
+gcc -o reliable_sender sender_main.c -lpthread -lm
+sender_main.c: In function ‘start_Protocol’:
+sender_main.c:264:30: error: expected ‘;’ before ‘)’ token
+     window_size = window_size)/2;
+                              ^
+sender_main.c:264:30: error: expected statement before ‘)’ token
+sender_main.c:264:31: error: expected expression before ‘/’ token
+     window_size = window_size)/2;
+                               ^
+make: *** [reliable_sender] Error 1
+ 
+drs g
+ rthr fjr 
+ tfjyh
+ erth 
+ ter h
+ reth 
+ rtjuti
+ =====================================compilation of version 154 failed with:
+gcc -o reliable_receiver receiver_main.c
+gcc -o reliable_sender sender_main.c -lpthread -lm
+sender_main.c: In function ‘start_Protocol’:
+sender_main.c:264:30: error: expected ‘;’ before ‘)’ token
+     window_size = window_size)/2;
+                              ^
+sender_main.c:264:30: error: expected statement before ‘)’ token
+sender_main.c:264:31: error: expected expression before ‘/’ token
+     window_size = window_size)/2;
+                               ^
+make: *** [reliable_sender] Error 1
+ 
+drs g
+ rthr fjr 
+ tfjyh
+ erth 
+ ter h
+ reth 
+ rtjuti
+ =====================================compilation of version 154 failed with:
+gcc -o reliable_receiver receiver_main.c
+gcc -o reliable_sender sender_main.c -lpthread -lm
+sender_main.c: In function ‘start_Protocol’:
+sender_main.c:264:30: error: expected ‘;’ before ‘)’ token
+     window_size = window_size)/2;
+                              ^
+sender_main.c:264:30: error: expected statement before ‘)’ token
+sender_main.c:264:31: error: expected expression before ‘/’ token
+     window_size = window_size)/2;
+                               ^
+make: *** [reliable_sender] Error 1
+ 
+drs g
+ rthr fjr 
+ tfjyh
+ erth 
+ ter h
+ reth 
+ rtjuti
+ =====================================compilation of version 154 failed with:
+gcc -o reliable_receiver receiver_main.c
+gcc -o reliable_sender sender_main.c -lpthread -lm
+sender_main.c: In function ‘start_Protocol’:
+sender_main.c:264:30: error: expected ‘;’ before ‘)’ token
+     window_size = window_size)/2;
+                              ^
+sender_main.c:264:30: error: expected statement before ‘)’ token
+sender_main.c:264:31: error: expected expression before ‘/’ token
+     window_size = window_size)/2;
+                               ^
+make: *** [reliable_sender] Error 1
+ 
+drs g
+ rthr fjr 
+ tfjyh
+ erth 
+ ter h
+ reth 
+ rtjuti
+ =====================================dsgd
+ hgstd
+ hsdf
+ hsfdh
+ dsrtfjrst
+ dtyj
+ stfrj
+ tfrj
+ sft
+ jngf
+ jhd
+ ujtfrrf
+ jndfgj
+ fcxgjedhgrdfbdshttsrhwrs hrwthrwsh trs hrwh rs
+ cxedrghsrhtsrhtrshsrdsthdrthrhrht
+ s erthyssssssss
+ rtesrhgdsrtfff
+ uhjstrh
+ 
+ rhtsdthgsth
+ sh
+ 

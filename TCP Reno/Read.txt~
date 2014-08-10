@@ -1,0 +1,7 @@
+The program run using the following commands in two termnial or computer by-
+./reliable_receiver UDP_port filename_to_write
+ie ./reliable_receiver 192.168.56.12:8080 output.txt
+Sender side
+./reliable_sender receiver_hostname receiver_port filename_to_xfer bytes_to_xfer
+i.e  
+./reliable_sender receiver_hostname 192.168.56.12:8080 inputfile.txt 300000
