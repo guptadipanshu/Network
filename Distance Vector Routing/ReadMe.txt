@@ -1,6 +1,6 @@
 TO run the code
 Deploy several VM having IP address from 192.168.56.12- 192.168.56.19
-then to select one VM as main sender run the command "./router [filetotransfer] [destination ip eg.5 ] in that VM 
+then to select one VM as main sender run the command "./router [filetotransfer] [destination ip eg. 5(to send to address 192.168.56.15) ] in that VM 
 Run the command ./router in other remaining VM
 use command like to do some fun testing-
 	stop this host from receiving from 192.168.56.19: sudo iptables -I INPUT -s 192.168.56.19 -j DROP
